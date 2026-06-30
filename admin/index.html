@@ -5,203 +5,299 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cross-Schedule Bot — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── Design System ── */
 :root {
-  --bg: #0e0e1a;
-  --card: #16162a;
-  --card-hover: #1c1c38;
-  --border: #2a2a48;
-  --text: #e8e8f0;
-  --text-dim: #8888aa;
-  --text-muted: #666688;
-  --accent: #c4a04a;
-  --accent-dim: #8a7030;
-  --danger: #e74c3c;
-  --success: #2ecc71;
-  --radius: 12px;
+  --bg: #f5f0e8;
+  --surface: #ffffff;
+  --surface-alt: #faf6ee;
+  --border: #e2dac8;
+  --border-light: #efe8d8;
+  --text: #2c2416;
+  --text-primary: #1a150c;
+  --text-secondary: #6b5d4a;
+  --text-muted: #9a8b78;
+  --accent: #b8860b;
+  --accent-light: #d4a843;
+  --accent-dim: #a07000;
+  --gold: #c9a84c;
+  --gold-light: #f0deb0;
+  --success: #3a7d44;
+  --success-light: #e8f5e9;
+  --danger: #b33a2a;
+  --danger-light: #fdecea;
+  --warn: #b8860b;
+  --warn-light: #fff8e1;
+  --radius: 2px;
+  --shadow: 0 1px 3px rgba(44, 36, 22, 0.06), 0 1px 2px rgba(44, 36, 22, 0.04);
+  --shadow-up: 0 4px 12px rgba(44, 36, 22, 0.08);
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── Base ── */
 body {
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  padding: 40px 20px;
+  padding: 40px 24px;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
 }
-h1 {
-  font-size: 1.8em;
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--text-primary); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { color: var(--accent-dim); }
+
+.container {
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.page-header h1 {
+  font-size: 2.6em;
   font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.page-header h1 .accent {
   color: var(--accent);
-  margin-bottom: 4px;
 }
-h1 small {
-  font-size: 0.55em;
-  font-weight: 400;
-  color: var(--text-dim);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-left: 12px;
+.page-header .subtitle {
+  font-family: var(--font-display);
+  font-size: 1.05em;
+  font-style: italic;
+  color: var(--text-secondary);
+  letter-spacing: 0.3px;
 }
-.subtitle { color: var(--text-dim); margin-bottom: 40px; font-size: 0.9em; }
-.container { max-width: 800px; margin: 0 auto; }
+.page-header .status-line {
+  margin-top: 14px;
+  font-size: 0.82em;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+.page-header .status-line span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
 
 /* ── Cards ── */
 .card {
-  background: var(--card);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 24px;
+  padding: 32px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow);
 }
 .card h2 {
-  font-size: 1.1em;
+  font-size: 1.3em;
   font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--text);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* ── Form ── */
-.form-group { margin-bottom: 16px; }
+.form-group { margin-bottom: 20px; }
 .form-group label {
   display: block;
-  font-size: 0.85em;
-  color: var(--text-dim);
-  margin-bottom: 6px;
+  font-size: 0.82em;
   font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
   padding: 10px 14px;
-  background: var(--bg);
+  background: var(--surface-alt);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95em;
+  font-family: var(--font-body);
+  font-size: 0.92em;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 .form-group input:focus,
-.form-group textarea:focus { border-color: var(--accent); }
-.form-group textarea { min-height: 80px; resize: vertical; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+  background: var(--surface);
+}
+.form-group textarea { min-height: 90px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
 /* ── Checkboxes ── */
 .checkbox-group {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 .checkbox-group label {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.9em;
+  gap: 8px;
+  font-size: 0.88em;
   cursor: pointer;
-  padding: 8px 14px;
-  background: var(--bg);
+  padding: 8px 16px;
+  background: var(--surface-alt);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
   transition: all 0.2s;
 }
-.checkbox-group label:hover { border-color: var(--accent-dim); }
-.checkbox-group input:checked + span { color: var(--accent); }
-.checkbox-group input[type="checkbox"] { accent-color: var(--accent); }
+.checkbox-group label:hover {
+  border-color: var(--gold);
+  background: var(--surface);
+}
+.checkbox-group input[type="checkbox"]:checked + span {
+  color: var(--accent);
+  font-weight: 500;
+}
+.checkbox-group input[type="checkbox"] {
+  accent-color: var(--accent);
+}
 
 /* ── Buttons ── */
 .btn {
-  padding: 12px 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
   border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95em;
+  border-radius: var(--radius);
+  font-weight: 500;
+  font-size: 0.88em;
+  font-family: var(--font-body);
   cursor: pointer;
   transition: all 0.2s;
+  letter-spacing: 0.3px;
 }
 .btn-primary {
   background: var(--accent);
-  color: var(--bg);
+  color: #fefefe;
   width: 100%;
 }
-.btn-primary:hover { background: #dbb95a; }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary:hover { background: var(--accent-dim); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
 .btn-github {
-  background: #24292e;
-  color: white;
-  width: 100%;
+  background: #1b1b1b;
+  color: #f0f0f0;
 }
-.btn-github:hover { background: #3a4149; }
-.btn-github:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-github:hover { background: #333; }
+.btn-github:disabled { opacity: 0.4; cursor: not-allowed; }
+
 .btn-danger {
   background: transparent;
   color: var(--danger);
-  border: 1px solid var(--danger);
-  padding: 6px 14px;
-  font-size: 0.8em;
+  border: 1px solid transparent;
+  padding: 4px 12px;
+  font-size: 0.78em;
 }
-.btn-danger:hover { background: rgba(231, 76, 60, 0.1); }
+.btn-danger:hover { border-color: var(--danger); }
+
 .btn-outline {
   background: transparent;
-  color: var(--text-dim);
+  color: var(--text-secondary);
   border: 1px solid var(--border);
-  padding: 6px 14px;
+  padding: 8px 14px;
   font-size: 0.8em;
 }
-.btn-outline:hover { border-color: var(--accent-dim); color: var(--text); }
+.btn-outline:hover { border-color: var(--gold); color: var(--accent); }
+
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.82em;
+}
 
 /* ── Post list ── */
 .post-list { list-style: none; }
 .post-item {
-  padding: 14px 16px;
-  background: var(--bg);
-  border-radius: 8px;
+  padding: 18px 20px;
+  background: var(--surface-alt);
+  border-left: 3px solid var(--gold);
   margin-bottom: 10px;
-  border: 1px solid var(--border);
-  transition: border-color 0.2s;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  transition: background 0.2s;
 }
-.post-item:hover { border-color: var(--accent-dim); }
+.post-item:hover { background: var(--bg); }
+.post-item.post-failed { border-left-color: var(--danger); }
+.post-item.post-partial { border-left-color: var(--warn); }
+.post-item.post-done { border-left-color: var(--success); }
+
 .post-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 6px;
+  gap: 12px;
 }
+.post-info { flex: 1; min-width: 0; }
 .post-text {
+  font-family: var(--font-body);
   font-size: 0.9em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  color: var(--text-primary);
 }
 .post-meta {
-  font-size: 0.8em;
+  font-size: 0.78em;
   color: var(--text-muted);
   display: flex;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
   align-items: center;
 }
+
 .post-status {
   display: inline-block;
   padding: 2px 10px;
   border-radius: 20px;
-  font-size: 0.75em;
+  font-size: 0.72em;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.post-status.pending { background: rgba(196, 160, 74, 0.15); color: var(--accent); }
-.post-status.publishing { background: rgba(52, 152, 219, 0.15); color: #3498db; }
-.post-status.published { background: rgba(46, 204, 113, 0.15); color: var(--success); }
-.post-status.partial { background: rgba(231, 76, 60, 0.15); color: #e67e22; }
-.post-status.failed { background: rgba(231, 76, 60, 0.15); color: var(--danger); }
+.post-status.pending { background: var(--warn-light); color: var(--warn); }
+.post-status.publishing { background: #e3f2fd; color: #1565c0; }
+.post-status.published { background: var(--success-light); color: var(--success); }
+.post-status.partial { background: var(--warn-light); color: var(--warn); }
+.post-status.failed { background: var(--danger-light); color: var(--danger); }
 
 /* ── Results log ── */
 .results-log {
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-light);
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -209,43 +305,56 @@ h1 small {
 .result-item {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.78em;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.77em;
   font-weight: 500;
 }
-.result-item.ok { background: rgba(46, 204, 113, 0.12); color: var(--success); }
-.result-item.error { background: rgba(231, 76, 60, 0.12); color: var(--danger); }
-.result-item.skipped { background: rgba(136, 136, 170, 0.12); color: var(--text-dim); }
+.result-item.ok { background: var(--success-light); color: var(--success); }
+.result-item.error { background: var(--danger-light); color: var(--danger); }
+.result-item.skipped { background: #f0ede8; color: var(--text-muted); }
+
+.result-error-msg {
+  font-weight: 400;
+  font-size: 0.9em;
+  margin-left: 4px;
+  opacity: 0.8;
+}
 
 /* ── Empty state ── */
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 48px 20px;
   color: var(--text-muted);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1em;
 }
-.empty-state .icon { font-size: 2em; margin-bottom: 8px; }
+.empty-state .icon { font-size: 2.4em; margin-bottom: 12px; opacity: 0.5; }
 
 /* ── Toast ── */
 .toast {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  padding: 14px 20px;
-  border-radius: 8px;
+  bottom: 28px;
+  right: 28px;
+  padding: 14px 24px;
+  border-radius: var(--radius);
   color: white;
   font-weight: 500;
-  font-size: 0.9em;
+  font-size: 0.88em;
+  font-family: var(--font-body);
   z-index: 999;
   transform: translateY(120px);
   opacity: 0;
-  transition: all 0.4s;
+  transition: all 0.35s;
+  box-shadow: var(--shadow-up);
+  background: var(--text-primary);
 }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
-.toast.info { background: #3498db; }
+.toast.info { background: #1565c0; }
 
 /* ── Media URL entry ── */
 .media-entry {
@@ -255,50 +364,99 @@ h1 small {
 }
 .media-entry input { flex: 1; }
 .media-entry input[type="text"] { flex: 2; }
-.btn-add-media {
-  background: var(--accent-dim);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-size: 0.85em;
-  white-space: nowrap;
-}
-.btn-add-media:hover { background: var(--accent); }
 
-/* ── Token input row ── */
+/* ── Token / Run section ── */
+.run-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
 .token-row {
   display: flex;
   gap: 8px;
 }
 .token-row input { flex: 1; }
-.token-row .btn { white-space: nowrap; width: auto; }
+.token-row .btn { width: auto; white-space: nowrap; }
+.run-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.run-status {
+  font-size: 0.84em;
+  color: var(--text-secondary);
+  font-style: italic;
+}
 .token-hint {
-  font-size: 0.8em;
+  font-size: 0.78em;
   color: var(--text-muted);
-  margin-top: 6px;
+  line-height: 1.5;
 }
 .token-hint a { color: var(--accent); }
-
-/* ── Run now row ── */
-.run-row {
-  display: flex;
-  gap: 8px;
-  align-items: end;
+.token-hint code {
+  background: var(--surface-alt);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-size: 0.9em;
+  border: 1px solid var(--border-light);
 }
-.run-row .btn { width: auto; }
-.run-status {
-  font-size: 0.85em;
-  color: var(--text-dim);
-  padding: 8px 0;
+
+/* ── Section divider ── */
+.section-divider {
+  font-family: var(--font-display);
+  font-size: 0.9em;
+  color: var(--text-muted);
+  margin: 24px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+/* ── Small print ── */
+.timezone-label {
+  font-family: var(--font-body);
+  font-size: 0.78em;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.footer .divider {
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: var(--border);
+  margin-bottom: 12px;
 }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>📡 Cross-Schedule Bot <small>Admin Dashboard</small></h1>
-  <p class="subtitle">Schedule posts for Mastodon, Bluesky, and Telegram</p>
+  <!-- Header -->
+  <div class="page-header">
+    <h1>📡 Cross<span class="accent">Schedule</span></h1>
+    <p class="subtitle">Schedule posts for Mastodon, Bluesky, and Telegram</p>
+    <div class="status-line">
+      <span>⏰ <span id="timezoneDisplay"></span></span>
+      <span>⚙️ Every 15 min via GitHub Actions</span>
+      <span>🗃️ Firebase Realtime Database</span>
+    </div>
+  </div>
 
   <!-- Schedule Post -->
   <div class="card">
@@ -306,19 +464,18 @@ h1 small {
     <form id="scheduleForm">
       <div class="form-group">
         <label>Post Text</label>
-        <textarea id="postText" placeholder="Write your post content..." rows="3"></textarea>
+        <textarea id="postText" placeholder="Write your post content…" rows="3"></textarea>
       </div>
 
       <div class="form-group">
-        <label>Media URLs (optional)</label>
+        <label>Media URLs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— optional</span></label>
         <div id="mediaContainer">
           <div class="media-entry">
             <input type="text" class="media-url" placeholder="https://example.com/image.jpg">
             <input type="text" class="media-alt" placeholder="Alt text for accessibility">
-            <button type="button" class="btn-add-media" onclick="addMediaRow()">+ Add</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="addMediaRow()">＋ Add</button>
           </div>
         </div>
-        <div id="mediaList" class="media-list"></div>
       </div>
 
       <div class="form-group">
@@ -336,9 +493,9 @@ h1 small {
           <input type="date" id="postDate">
         </div>
         <div class="form-group">
-          <label>Time (your local time — 24h format)</label>
+          <label>Time <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— 24h format</span></label>
           <input type="time" id="postTime" value="08:00">
-          <small style="color:var(--text-muted);display:block;margin-top:4px;font-size:0.8em">Your timezone: <span id="timezoneDisplay"></span></small>
+          <div class="timezone-label">Your timezone: <span id="timezoneDisplay2"></span></div>
         </div>
       </div>
 
@@ -349,33 +506,39 @@ h1 small {
   <!-- Run Now -->
   <div class="card">
     <h2>▶️ Run Now</h2>
-    <div class="form-group">
-      <label>GitHub Token <small style="color:var(--text-muted)">(saved in your browser — never sent anywhere else)</small></label>
-      <div class="token-row">
-        <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-        <button class="btn btn-outline" onclick="toggleToken()">👁️</button>
+    <div class="run-card-inner">
+      <div class="form-group" style="margin:0">
+        <label>GitHub Token <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— saved in browser, never shared</span></label>
+        <div class="token-row">
+          <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <button class="btn btn-outline btn-sm" onclick="toggleToken()">👁️</button>
+        </div>
+        <div class="token-hint">
+          Requires <code>workflow</code> scope. 
+          <a href="https://github.com/settings/tokens/new?description=Cross-Schedule-Bot+Admin&scopes=workflow" target="_blank">Create one →</a>
+        </div>
       </div>
-      <div class="token-hint">
-        Needs <code>workflow</code> scope. 
-        <a href="https://github.com/settings/tokens/new?description=Cross-Schedule-Bot+Admin&scopes=workflow" target="_blank">Create one here</a>
-        (only needs <strong>Actions: Write</strong> for this repo).
+      <div class="run-actions">
+        <button class="btn btn-github btn-sm" id="runNowBtn" onclick="triggerWorkflow()">🚀 Trigger Workflow Now</button>
+        <span id="runStatus" class="run-status"></span>
       </div>
-    </div>
-    <div class="run-row">
-      <button class="btn btn-github" id="runNowBtn" onclick="triggerWorkflow()">🚀 Trigger Workflow Now</button>
-      <div id="runStatus" class="run-status"></div>
     </div>
   </div>
 
   <!-- Scheduled Posts -->
-  <div class="card">
-    <h2>📋 Scheduled Posts &amp; Logs</h2>
+  <div class="card" style="padding-bottom:24px">
+    <h2>📋 Posts &amp; Logs</h2>
     <div id="postListContainer">
       <div class="empty-state">
         <div class="icon">📭</div>
-        <p>No posts yet</p>
+        <p>No posts scheduled yet.<br>Use the form above to create one.</p>
       </div>
     </div>
+  </div>
+
+  <div class="footer">
+    <div class="divider"></div>
+    <p>Cross-Schedule Bot — built with Firebase, GitHub Actions, and a touch of gold.</p>
   </div>
 </div>
 
@@ -397,7 +560,7 @@ import { getDatabase, ref, push, set, onValue, query, orderByChild, remove } fro
 
 // ── Firebase Config ──
 const firebaseConfig = {
-  apiKey: "AIzaSyCK37q3HVbAQZgwUUqUI8rGyTprNA30rBE",
+  apiKey: "AIzaSy…0rBE",
   authDomain: "oddsalley-31ydy.firebaseapp.com",
   databaseURL: "https://oddsalley-31ydy-default-rtdb.firebaseio.com",
   projectId: "oddsalley-31ydy",
@@ -414,6 +577,7 @@ const postsRef = ref(database, 'scheduled-posts');
 // ── Timezone ──
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 document.getElementById('timezoneDisplay').textContent = tz;
+document.getElementById('timezoneDisplay2').textContent = tz;
 
 // ── GitHub token from localStorage ──
 const savedToken = localStorage.getItem('github_token');
@@ -448,7 +612,7 @@ window.triggerWorkflow = async function() {
   }
 
   btn.disabled = true;
-  statusEl.textContent = '⏳ Triggering workflow...';
+  statusEl.textContent = '⏳ Triggering workflow…';
 
   try {
     const res = await fetch(
@@ -467,7 +631,6 @@ window.triggerWorkflow = async function() {
     if (res.status === 204) {
       statusEl.textContent = '✅ Workflow triggered! Check the Actions tab.';
       showToast('🚀 Workflow triggered!');
-      // Clear after 30s
       setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 30000);
     } else {
       const data = await res.json();
@@ -489,7 +652,7 @@ function addMediaRow(url = '', alt = '') {
   entry.innerHTML = `
     <input type="text" class="media-url" placeholder="https://example.com/image.jpg" value="${url}">
     <input type="text" class="media-alt" placeholder="Alt text" value="${alt}">
-    <button type="button" class="btn-add-media" onclick="this.parentElement.remove()">✕</button>
+    <button type="button" class="btn btn-sm btn-outline" onclick="this.parentElement.remove()">✕ Remove</button>
   `;
   container.appendChild(entry);
 }
@@ -519,12 +682,13 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
   if (!text && media.length === 0) { showToast('Please enter text or add media.', 'error'); return; }
   if (platforms.length === 0) { showToast('Select at least one platform.', 'error'); return; }
 
+  // Build timestamp from local time (browser converts to UTC epoch)
   const scheduledAt = new Date(`${date}T${time}:00`).getTime();
   if (scheduledAt < Date.now()) { showToast('Scheduled time must be in the future.', 'error'); return; }
 
   const btn = document.getElementById('scheduleBtn');
   btn.disabled = true;
-  btn.textContent = '⏳ Scheduling...';
+  btn.textContent = '⏳ Scheduling…';
 
   try {
     const newPostRef = push(postsRef);
@@ -539,9 +703,9 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
       <div class="media-entry">
         <input type="text" class="media-url" placeholder="https://example.com/image.jpg">
         <input type="text" class="media-alt" placeholder="Alt text for accessibility">
-        <button type="button" class="btn-add-media" onclick="addMediaRow()">+ Add</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="addMediaRow()">＋ Add</button>
       </div>`;
-  } catch (err) { showToast(`❌ Failed: ${err.message}`, 'error'); }
+  } catch (err) { showToast(`❌ Could not schedule: ${err.message}`, 'error'); }
 
   btn.disabled = false;
   btn.textContent = '📅 Schedule Post';
@@ -568,12 +732,11 @@ onValue(postsQuery, (snapshot) => {
     container.innerHTML = `
       <div class="empty-state">
         <div class="icon">📭</div>
-        <p>No posts scheduled or published yet</p>
+        <p>No posts yet.<br>Use the form above to create one.</p>
       </div>`;
     return;
   }
 
-  // Sort: pending/publishing first (by scheduledAt), then published/partial/failed (by publishedAt)
   const active = posts.filter(p => p.status === 'pending' || p.status === 'publishing');
   const done = posts.filter(p => ['published','partial','failed'].includes(p.status));
 
@@ -582,17 +745,15 @@ onValue(postsQuery, (snapshot) => {
 
   let html = '';
 
-  // Actual active posts
   if (active.length > 0) {
-    html += '<h3 style="font-size:0.9em;color:var(--accent);margin-bottom:12px">⏳ Upcoming / In Progress</h3>';
+    html += '<div class="section-divider">⏳ Upcoming &middot; In Progress</div>';
     html += '<ul class="post-list">';
     for (const post of active) html += renderPost(post);
     html += '</ul>';
   }
 
-  // Historical posts (shows logs)
   if (done.length > 0) {
-    html += `<h3 style="font-size:0.9em;color:var(--text-dim);margin:20px 0 12px">📜 History (last ${done.length})</h3>`;
+    html += '<div class="section-divider">📜 History</div>';
     html += '<ul class="post-list">';
     for (const post of done) html += renderPost(post);
     html += '</ul>';
@@ -611,32 +772,38 @@ function renderPost(post) {
   const platformsStr = (post.platforms || []).join(', ');
   const showDelete = post.status === 'pending' || post.status === 'publishing';
 
-  // Build per-platform result badges
+  // Per-platform result badges
   let resultsHtml = '';
   if (post.results && Array.isArray(post.results)) {
     resultsHtml = '<div class="results-log">';
     const icons = { mastodon: '🐘', bluesky: '🦋', telegram: '✈️' };
     for (const r of post.results) {
       const icon = icons[r.platform] || '📡';
-      const statusIcon = r.status === 'ok' ? '✅' : r.status === 'error' ? '❌' : '⏭️';
+      const statusIcon = r.status === 'ok' ? '✓' : r.status === 'error' ? '✗' : '–';
       resultsHtml += `<span class="result-item ${r.status}">${icon} ${statusIcon} ${r.platform}`;
-      if (r.error) resultsHtml += `<span style="font-weight:400;margin-left:4px;font-size:0.9em">${escapeHtml(r.error.slice(0, 80))}</span>`;
+      if (r.error) resultsHtml += `<span class="result-error-msg">${escapeHtml(r.error.slice(0, 100))}</span>`;
       resultsHtml += '</span>';
     }
     resultsHtml += '</div>';
   }
 
+  // Border accent color based on status
+  let extraClass = '';
+  if (post.status === 'failed') extraClass = ' post-failed';
+  else if (post.status === 'partial') extraClass = ' post-partial';
+  else if (post.status === 'published') extraClass = ' post-done';
+
   return `
-    <li class="post-item">
+    <li class="post-item${extraClass}">
       <div class="post-header">
         <div class="post-info">
-          <div class="post-text">${escapeHtml((post.text || '(media only)').slice(0, 140))}</div>
+          <div class="post-text">${escapeHtml((post.text || '(media only)').slice(0, 160))}</div>
           <div class="post-meta">
             <span>📅 ${dateStr}</span>
             ${platformsStr ? `<span>🎯 ${platformsStr}</span>` : ''}
-            ${post.media?.length ? `<span>📎 ${post.media.length} media</span>` : ''}
+            ${post.media?.length ? `<span>📎 ${post.media.length} ${post.media.length === 1 ? 'file' : 'files'}</span>` : ''}
             <span class="post-status ${statusClass}">${statusClass}</span>
-            ${post.error ? `<span style="color:var(--danger)">⚠️ ${escapeHtml(post.error.slice(0, 80))}</span>` : ''}
+            ${post.error ? `<span style="color:var(--danger)">${escapeHtml(post.error.slice(0, 80))}</span>` : ''}
           </div>
         </div>
         ${showDelete ? `<button class="btn btn-danger" onclick="deletePost('${post.id}')">Delete</button>` : ''}
@@ -648,10 +815,8 @@ function renderPost(post) {
 // ── Delete a post ──
 window.deletePost = async function(postId) {
   if (!confirm('Delete this scheduled post?')) return;
-  try {
-    await remove(ref(database, `scheduled-posts/${postId}`));
-    showToast('🗑️ Post deleted');
-  } catch (err) { showToast(`❌ Delete failed: ${err.message}`, 'error'); }
+  try { await remove(ref(database, `scheduled-posts/${postId}`)); showToast('🗑️ Post deleted'); }
+  catch (err) { showToast(`❌ Delete failed: ${err.message}`, 'error'); }
 };
 
 // ── Escape HTML ──
