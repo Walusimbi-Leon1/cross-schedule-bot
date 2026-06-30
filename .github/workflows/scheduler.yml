@@ -33,11 +33,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Write Firebase service account to file (avoids YAML multiline issues)
+      - name: Write Firebase service account
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-key.json
+
       - name: Run schedule checker
         run: node src/index.js
         env:
           # Firebase
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          FIREBASE_SERVICE_ACCOUNT_PATH: firebase-key.json
           FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
 
           # Mastodon

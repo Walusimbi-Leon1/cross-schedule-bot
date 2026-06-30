@@ -303,8 +303,9 @@ h1 small {
           <input type="date" id="postDate">
         </div>
         <div class="form-group">
-          <label>Time (UTC — 24h format)</label>
+          <label>Time (your local time — 24h format)</label>
           <input type="time" id="postTime" value="08:00">
+          <small style="color:var(--text-muted);display:block;margin-top:4px;font-size:0.8em">Your timezone: <span id="timezoneDisplay"></span></small>
         </div>
       </div>
 
@@ -359,6 +360,9 @@ const postsRef = ref(database, 'scheduled-posts');
 // ── Set min date to today ──
 document.getElementById('postDate').min = new Date().toISOString().split('T')[0];
 document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+
+// ── Show user's timezone ──
+document.getElementById('timezoneDisplay').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 // ── Toast helper ──
 function showToast(message, type = 'success') {
@@ -418,8 +422,9 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
     return;
   }
 
-  // Build scheduledAt timestamp (UTC)
-  const scheduledAt = new Date(`${date}T${time}:00Z`).getTime();
+  // Build scheduledAt timestamp (local time, converted to UTC epoch)
+  const scheduledAt = new Date(`${date}T${time}:00`).getTime();
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   if (scheduledAt < Date.now()) {
     showToast('Scheduled time must be in the future.', 'error');
     return;
@@ -442,7 +447,7 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
       error: null,
     });
 
-    showToast(`✅ Post scheduled for ${date} ${time} UTC`);
+    showToast(`✅ Post scheduled for ${date} ${time} ${tz}`);
     document.getElementById('postText').value = '';
     // Clear media rows except first empty one
     const container = document.getElementById('mediaContainer');
@@ -495,10 +500,11 @@ onValue(postsQuery, (snapshot) => {
   let html = '<ul class="post-list">';
   for (const post of posts) {
     const dt = new Date(post.scheduledAt);
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const dateStr = dt.toLocaleString('en-GB', {
       month: 'short', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC',
-    });
+      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz,
+    }) + ` ${tz}`;
     const statusClass = post.status || 'pending';
     const platformsStr = (post.platforms || Object.keys({mastodon:1,bluesky:1,telegram:1})).join(', ');
 
