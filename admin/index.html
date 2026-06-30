@@ -85,18 +85,9 @@ h1 small {
   transition: border-color 0.2s;
 }
 .form-group input:focus,
-.form-group textarea:focus {
-  border-color: var(--accent);
-}
-.form-group textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
+.form-group textarea:focus { border-color: var(--accent); }
+.form-group textarea { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 /* ── Checkboxes ── */
 .checkbox-group {
@@ -116,15 +107,9 @@ h1 small {
   border-radius: 8px;
   transition: all 0.2s;
 }
-.checkbox-group label:hover {
-  border-color: var(--accent-dim);
-}
-.checkbox-group input:checked + span {
-  color: var(--accent);
-}
-.checkbox-group input[type="checkbox"] {
-  accent-color: var(--accent);
-}
+.checkbox-group label:hover { border-color: var(--accent-dim); }
+.checkbox-group input:checked + span { color: var(--accent); }
+.checkbox-group input[type="checkbox"] { accent-color: var(--accent); }
 
 /* ── Buttons ── */
 .btn {
@@ -142,10 +127,14 @@ h1 small {
   width: 100%;
 }
 .btn-primary:hover { background: #dbb95a; }
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-github {
+  background: #24292e;
+  color: white;
+  width: 100%;
 }
+.btn-github:hover { background: #3a4149; }
+.btn-github:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-danger {
   background: transparent;
   color: var(--danger);
@@ -154,22 +143,32 @@ h1 small {
   font-size: 0.8em;
 }
 .btn-danger:hover { background: rgba(231, 76, 60, 0.1); }
+.btn-outline {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  font-size: 0.8em;
+}
+.btn-outline:hover { border-color: var(--accent-dim); color: var(--text); }
 
 /* ── Post list ── */
 .post-list { list-style: none; }
 .post-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   padding: 14px 16px;
   background: var(--bg);
   border-radius: 8px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   border: 1px solid var(--border);
   transition: border-color 0.2s;
 }
 .post-item:hover { border-color: var(--accent-dim); }
-.post-info { flex: 1; min-width: 0; }
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
 .post-text {
   font-size: 0.9em;
   white-space: nowrap;
@@ -183,6 +182,7 @@ h1 small {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  align-items: center;
 }
 .post-status {
   display: inline-block;
@@ -194,7 +194,30 @@ h1 small {
 .post-status.pending { background: rgba(196, 160, 74, 0.15); color: var(--accent); }
 .post-status.publishing { background: rgba(52, 152, 219, 0.15); color: #3498db; }
 .post-status.published { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+.post-status.partial { background: rgba(231, 76, 60, 0.15); color: #e67e22; }
 .post-status.failed { background: rgba(231, 76, 60, 0.15); color: var(--danger); }
+
+/* ── Results log ── */
+.results-log {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.result-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.78em;
+  font-weight: 500;
+}
+.result-item.ok { background: rgba(46, 204, 113, 0.12); color: var(--success); }
+.result-item.error { background: rgba(231, 76, 60, 0.12); color: var(--danger); }
+.result-item.skipped { background: rgba(136, 136, 170, 0.12); color: var(--text-dim); }
 
 /* ── Empty state ── */
 .empty-state {
@@ -222,6 +245,7 @@ h1 small {
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
+.toast.info { background: #3498db; }
 
 /* ── Media URL entry ── */
 .media-entry {
@@ -242,24 +266,33 @@ h1 small {
   white-space: nowrap;
 }
 .btn-add-media:hover { background: var(--accent); }
-.media-list { margin-top: 8px; }
-.media-item {
+
+/* ── Token input row ── */
+.token-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 10px;
-  background: var(--bg);
-  border-radius: 6px;
-  margin-bottom: 4px;
+  gap: 8px;
+}
+.token-row input { flex: 1; }
+.token-row .btn { white-space: nowrap; width: auto; }
+.token-hint {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.token-hint a { color: var(--accent); }
+
+/* ── Run now row ── */
+.run-row {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+}
+.run-row .btn { width: auto; }
+.run-status {
   font-size: 0.85em;
   color: var(--text-dim);
+  padding: 8px 0;
 }
-.media-item .remove {
-  color: var(--danger);
-  cursor: pointer;
-  padding: 2px 6px;
-}
-.media-item .remove:hover { opacity: 0.7; }
 </style>
 </head>
 <body>
@@ -313,13 +346,34 @@ h1 small {
     </form>
   </div>
 
+  <!-- Run Now -->
+  <div class="card">
+    <h2>▶️ Run Now</h2>
+    <div class="form-group">
+      <label>GitHub Token <small style="color:var(--text-muted)">(saved in your browser — never sent anywhere else)</small></label>
+      <div class="token-row">
+        <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+        <button class="btn btn-outline" onclick="toggleToken()">👁️</button>
+      </div>
+      <div class="token-hint">
+        Needs <code>workflow</code> scope. 
+        <a href="https://github.com/settings/tokens/new?description=Cross-Schedule-Bot+Admin&scopes=workflow" target="_blank">Create one here</a>
+        (only needs <strong>Actions: Write</strong> for this repo).
+      </div>
+    </div>
+    <div class="run-row">
+      <button class="btn btn-github" id="runNowBtn" onclick="triggerWorkflow()">🚀 Trigger Workflow Now</button>
+      <div id="runStatus" class="run-status"></div>
+    </div>
+  </div>
+
   <!-- Scheduled Posts -->
   <div class="card">
-    <h2>📋 Scheduled Posts</h2>
+    <h2>📋 Scheduled Posts &amp; Logs</h2>
     <div id="postListContainer">
       <div class="empty-state">
         <div class="icon">📭</div>
-        <p>No scheduled posts yet</p>
+        <p>No posts yet</p>
       </div>
     </div>
   </div>
@@ -339,7 +393,7 @@ h1 small {
 </script>
 <script type="module">
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push, set, onValue, query, orderByChild, remove, update } from 'firebase/database';
+import { getDatabase, ref, push, set, onValue, query, orderByChild, remove } from 'firebase/database';
 
 // ── Firebase Config ──
 const firebaseConfig = {
@@ -357,20 +411,75 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const postsRef = ref(database, 'scheduled-posts');
 
-// ── Set min date to today ──
-document.getElementById('postDate').min = new Date().toISOString().split('T')[0];
-document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+// ── Timezone ──
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+document.getElementById('timezoneDisplay').textContent = tz;
 
-// ── Show user's timezone ──
-document.getElementById('timezoneDisplay').textContent = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// ── GitHub token from localStorage ──
+const savedToken = localStorage.getItem('github_token');
+if (savedToken) document.getElementById('githubToken').value = savedToken;
+document.getElementById('githubToken').addEventListener('input', () => {
+  localStorage.setItem('github_token', document.getElementById('githubToken').value.trim());
+});
 
 // ── Toast helper ──
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
   toast.textContent = message;
   toast.className = `toast ${type} show`;
-  setTimeout(() => toast.classList.remove('show'), 3000);
+  setTimeout(() => toast.classList.remove('show'), 4000);
 }
+
+// ── Toggle token visibility ──
+window.toggleToken = function() {
+  const el = document.getElementById('githubToken');
+  el.type = el.type === 'password' ? 'text' : 'password';
+};
+
+// ── Trigger workflow ──
+window.triggerWorkflow = async function() {
+  const token = document.getElementById('githubToken').value.trim();
+  const statusEl = document.getElementById('runStatus');
+  const btn = document.getElementById('runNowBtn');
+
+  if (!token) {
+    showToast('Please enter a GitHub token first.', 'error');
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.textContent = '⏳ Triggering workflow...';
+
+  try {
+    const res = await fetch(
+      'https://api.github.com/repos/Walusimbi-Leon1/cross-schedule-bot/actions/workflows/scheduler.yml/dispatches',
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ref: 'main' }),
+      }
+    );
+
+    if (res.status === 204) {
+      statusEl.textContent = '✅ Workflow triggered! Check the Actions tab.';
+      showToast('🚀 Workflow triggered!');
+      // Clear after 30s
+      setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 30000);
+    } else {
+      const data = await res.json();
+      throw new Error(data.message || `HTTP ${res.status}`);
+    }
+  } catch (e) {
+    statusEl.textContent = `❌ ${e.message}`;
+    showToast(`❌ Failed: ${e.message}`, 'error');
+  }
+
+  btn.disabled = false;
+};
 
 // ── Media rows ──
 function addMediaRow(url = '', alt = '') {
@@ -394,41 +503,24 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
   const date = document.getElementById('postDate').value;
   const time = document.getElementById('postTime').value || '08:00';
 
-  // Media URLs
   const mediaUrlInputs = document.querySelectorAll('.media-url');
   const mediaAltInputs = document.querySelectorAll('.media-alt');
   const media = [];
   mediaUrlInputs.forEach((input, i) => {
     const url = input.value.trim();
     if (url) {
-      media.push({
-        url,
-        alt: mediaAltInputs[i]?.value?.trim() || '',
-        type: guessMediaType(url),
-      });
+      media.push({ url, alt: mediaAltInputs[i]?.value?.trim() || '', type: guessMediaType(url) });
     }
   });
 
-  // Platforms
   const platformCbs = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
   const platforms = Array.from(platformCbs).map(cb => cb.value);
 
-  if (!text && media.length === 0) {
-    showToast('Please enter text or add media.', 'error');
-    return;
-  }
-  if (platforms.length === 0) {
-    showToast('Select at least one platform.', 'error');
-    return;
-  }
+  if (!text && media.length === 0) { showToast('Please enter text or add media.', 'error'); return; }
+  if (platforms.length === 0) { showToast('Select at least one platform.', 'error'); return; }
 
-  // Build scheduledAt timestamp (local time, converted to UTC epoch)
   const scheduledAt = new Date(`${date}T${time}:00`).getTime();
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if (scheduledAt < Date.now()) {
-    showToast('Scheduled time must be in the future.', 'error');
-    return;
-  }
+  if (scheduledAt < Date.now()) { showToast('Scheduled time must be in the future.', 'error'); return; }
 
   const btn = document.getElementById('scheduleBtn');
   btn.disabled = true;
@@ -437,19 +529,11 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
   try {
     const newPostRef = push(postsRef);
     await set(newPostRef, {
-      text,
-      media,
-      platforms,
-      scheduledAt,
-      status: 'pending',
-      createdAt: Date.now(),
-      publishedAt: null,
-      error: null,
+      text, media, platforms, scheduledAt,
+      status: 'pending', createdAt: Date.now(), publishedAt: null, error: null,
     });
-
     showToast(`✅ Post scheduled for ${date} ${time} ${tz}`);
     document.getElementById('postText').value = '';
-    // Clear media rows except first empty one
     const container = document.getElementById('mediaContainer');
     container.innerHTML = `
       <div class="media-entry">
@@ -457,9 +541,7 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
         <input type="text" class="media-alt" placeholder="Alt text for accessibility">
         <button type="button" class="btn-add-media" onclick="addMediaRow()">+ Add</button>
       </div>`;
-  } catch (err) {
-    showToast(`❌ Failed: ${err.message}`, 'error');
-  }
+  } catch (err) { showToast(`❌ Failed: ${err.message}`, 'error'); }
 
   btn.disabled = false;
   btn.textContent = '📅 Schedule Post';
@@ -479,53 +561,89 @@ onValue(postsQuery, (snapshot) => {
   const posts = [];
 
   snapshot.forEach((child) => {
-    const val = child.val();
-    if (val.status !== 'published') {
-      posts.push({ id: child.key, ...val });
-    }
+    posts.push({ id: child.key, ...child.val() });
   });
 
   if (posts.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
         <div class="icon">📭</div>
-        <p>No upcoming scheduled posts</p>
+        <p>No posts scheduled or published yet</p>
       </div>`;
     return;
   }
 
-  // Sort by scheduledAt ascending
-  posts.sort((a, b) => a.scheduledAt - b.scheduledAt);
+  // Sort: pending/publishing first (by scheduledAt), then published/partial/failed (by publishedAt)
+  const active = posts.filter(p => p.status === 'pending' || p.status === 'publishing');
+  const done = posts.filter(p => ['published','partial','failed'].includes(p.status));
 
-  let html = '<ul class="post-list">';
-  for (const post of posts) {
-    const dt = new Date(post.scheduledAt);
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const dateStr = dt.toLocaleString('en-GB', {
-      month: 'short', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz,
-    }) + ` ${tz}`;
-    const statusClass = post.status || 'pending';
-    const platformsStr = (post.platforms || Object.keys({mastodon:1,bluesky:1,telegram:1})).join(', ');
+  active.sort((a, b) => a.scheduledAt - b.scheduledAt);
+  done.sort((a, b) => (b.publishedAt || b.scheduledAt) - (a.publishedAt || a.scheduledAt));
 
-    html += `
-      <li class="post-item">
-        <div class="post-info">
-          <div class="post-text">${escapeHtml((post.text || '(media only)').slice(0, 120))}</div>
-          <div class="post-meta">
-            <span>📅 ${dateStr} UTC</span>
-            <span>🎯 ${platformsStr}</span>
-            ${post.media?.length ? `<span>📎 ${post.media.length} media</span>` : ''}
-            <span class="post-status ${statusClass}">${statusClass}</span>
-            ${post.error ? `<span style="color:var(--danger)">⚠️ ${escapeHtml(post.error.slice(0, 60))}</span>` : ''}
-          </div>
-        </div>
-        <button class="btn btn-danger" onclick="deletePost('${post.id}')">Delete</button>
-      </li>`;
+  let html = '';
+
+  // Actual active posts
+  if (active.length > 0) {
+    html += '<h3 style="font-size:0.9em;color:var(--accent);margin-bottom:12px">⏳ Upcoming / In Progress</h3>';
+    html += '<ul class="post-list">';
+    for (const post of active) html += renderPost(post);
+    html += '</ul>';
   }
-  html += '</ul>';
+
+  // Historical posts (shows logs)
+  if (done.length > 0) {
+    html += `<h3 style="font-size:0.9em;color:var(--text-dim);margin:20px 0 12px">📜 History (last ${done.length})</h3>`;
+    html += '<ul class="post-list">';
+    for (const post of done) html += renderPost(post);
+    html += '</ul>';
+  }
+
   container.innerHTML = html;
 });
+
+function renderPost(post) {
+  const dt = new Date(post.scheduledAt);
+  const dateStr = dt.toLocaleString('en-GB', {
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz,
+  }) + ` ${tz}`;
+  const statusClass = post.status || 'pending';
+  const platformsStr = (post.platforms || []).join(', ');
+  const showDelete = post.status === 'pending' || post.status === 'publishing';
+
+  // Build per-platform result badges
+  let resultsHtml = '';
+  if (post.results && Array.isArray(post.results)) {
+    resultsHtml = '<div class="results-log">';
+    const icons = { mastodon: '🐘', bluesky: '🦋', telegram: '✈️' };
+    for (const r of post.results) {
+      const icon = icons[r.platform] || '📡';
+      const statusIcon = r.status === 'ok' ? '✅' : r.status === 'error' ? '❌' : '⏭️';
+      resultsHtml += `<span class="result-item ${r.status}">${icon} ${statusIcon} ${r.platform}`;
+      if (r.error) resultsHtml += `<span style="font-weight:400;margin-left:4px;font-size:0.9em">${escapeHtml(r.error.slice(0, 80))}</span>`;
+      resultsHtml += '</span>';
+    }
+    resultsHtml += '</div>';
+  }
+
+  return `
+    <li class="post-item">
+      <div class="post-header">
+        <div class="post-info">
+          <div class="post-text">${escapeHtml((post.text || '(media only)').slice(0, 140))}</div>
+          <div class="post-meta">
+            <span>📅 ${dateStr}</span>
+            ${platformsStr ? `<span>🎯 ${platformsStr}</span>` : ''}
+            ${post.media?.length ? `<span>📎 ${post.media.length} media</span>` : ''}
+            <span class="post-status ${statusClass}">${statusClass}</span>
+            ${post.error ? `<span style="color:var(--danger)">⚠️ ${escapeHtml(post.error.slice(0, 80))}</span>` : ''}
+          </div>
+        </div>
+        ${showDelete ? `<button class="btn btn-danger" onclick="deletePost('${post.id}')">Delete</button>` : ''}
+      </div>
+      ${resultsHtml}
+    </li>`;
+}
 
 // ── Delete a post ──
 window.deletePost = async function(postId) {
@@ -533,9 +651,7 @@ window.deletePost = async function(postId) {
   try {
     await remove(ref(database, `scheduled-posts/${postId}`));
     showToast('🗑️ Post deleted');
-  } catch (err) {
-    showToast(`❌ Delete failed: ${err.message}`, 'error');
-  }
+  } catch (err) { showToast(`❌ Delete failed: ${err.message}`, 'error'); }
 };
 
 // ── Escape HTML ──
@@ -544,6 +660,10 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+// ── Set min date to today ──
+document.getElementById('postDate').min = new Date().toISOString().split('T')[0];
+document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
 </script>
 </body>
 </html>

@@ -73,6 +73,21 @@ export async function markPublishing(postId) {
 }
 
 /**
+ * Write per-platform publish results to a post's log.
+ */
+export async function updatePostResults(postId, results) {
+  const database = getDatabase();
+  const allOk = results.every((r) => r.status === 'ok');
+  const anyError = results.some((r) => r.status === 'error');
+
+  await database.ref(`scheduled-posts/${postId}`).update({
+    status: allOk ? 'published' : anyError ? 'partial' : 'published',
+    results,
+    publishedAt: Date.now(),
+  });
+}
+
+/**
  * Delete a post after successful publishing.
  */
 export async function deletePost(postId) {
@@ -88,6 +103,7 @@ export async function markFailed(postId, error) {
   const database = getDatabase();
   await database.ref(`scheduled-posts/${postId}`).update({
     status: 'failed',
+    results: null,
     error: error?.message || String(error),
     failedAt: Date.now(),
   });

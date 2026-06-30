@@ -2,7 +2,7 @@
  * scheduler.js — Check Firebase for due posts and publish to all platforms.
  */
 
-import { getDuePosts, markPublishing, deletePost, markFailed } from './firebase.js';
+import { getDuePosts, markPublishing, deletePost, markFailed, updatePostResults } from './firebase.js';
 import { postToMastodon } from './platforms/mastodon.js';
 import { postToBluesky } from './platforms/bluesky.js';
 import { postToTelegram } from './platforms/telegram.js';
@@ -103,28 +103,25 @@ export async function runScheduler() {
 
     const results = await publishPost(post);
 
-    const allOk = results.every((r) => r.status === 'ok');
-    const someSkipped = results.some((r) => r.status === 'skipped');
+    if (!DRY_RUN) {
+      // Write per-platform results to Firebase
+      await updatePostResults(post.id, results);
 
-    if (allOk) {
-      if (!DRY_RUN) {
+      const hasErrors = results.some((r) => r.status === 'error');
+      if (!hasErrors) {
+        // All ok (or skipped) — delete the post
         await deletePost(post.id);
       } else {
-        console.log(`  🔍 DRY RUN — would delete post ${post.id}`);
-      }
-    } else if (someSkipped && results.filter((r) => r.status === 'error').length === 0) {
-      // Only skipped (not errored) — still ok to delete
-      if (!DRY_RUN) {
-        await deletePost(post.id);
-      } else {
-        console.log(`  🔍 DRY RUN — would delete post ${post.id} (skipped unconfigured platforms)`);
+        const errors = results.filter((r) => r.status === 'error').map((r) => r.error).join('; ');
+        console.log(`  ⚠️  Keeping post ${post.id} in DB for log review (some platforms failed)`);
       }
     } else {
-      if (!DRY_RUN) {
-        const errors = results.filter((r) => r.status === 'error').map((r) => r.error).join('; ');
-        await markFailed(post.id, errors);
+      // Dry-run: log what would happen
+      const hasErrors = results.some((r) => r.status === 'error');
+      if (hasErrors) {
+        console.log(`  🔍 DRY RUN — would keep post ${post.id} (some failures)`);
       } else {
-        console.log(`  🔍 DRY RUN — would mark post ${post.id} as failed`);
+        console.log(`  🔍 DRY RUN — would delete post ${post.id}`);
       }
     }
   }
