@@ -108,3 +108,36 @@ export async function markFailed(postId, error) {
     failedAt: Date.now(),
   });
 }
+
+/**
+ * Restore a failed/partial post — reset to pending with only missed platforms.
+ */
+export async function restorePost(postId) {
+  const database = getDatabase();
+  const snap = await database.ref(`scheduled-posts/${postId}`).once('value');
+  const post = snap.val();
+  if (!post) throw new Error('Post not found');
+
+  const results = post.results || [];
+  const missed = results
+    .filter((r) => r.status === 'error')
+    .map((r) => r.platform);
+
+  // Also include platforms that were in the original but somehow missing from results
+  const originalPlatforms = post.platforms || [];
+  const alreadyPosted = results.filter((r) => r.status === 'ok').map((r) => r.platform);
+  const targetPlatforms = missed.length > 0
+    ? missed
+    : originalPlatforms.filter((p) => !alreadyPosted.includes(p));
+
+  await database.ref(`scheduled-posts/${postId}`).update({
+    status: 'pending',
+    platforms: targetPlatforms,
+    results: null,
+    error: null,
+    restoredAt: Date.now(),
+    scheduledAt: Date.now(), // due immediately
+  });
+
+  return targetPlatforms;
+}

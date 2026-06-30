@@ -104,25 +104,18 @@ export async function runScheduler() {
     const results = await publishPost(post);
 
     if (!DRY_RUN) {
-      // Write per-platform results to Firebase
+      // Write per-platform results to Firebase — keep post in DB for history
       await updatePostResults(post.id, results);
 
       const hasErrors = results.some((r) => r.status === 'error');
-      if (!hasErrors) {
-        // All ok (or skipped) — delete the post
-        await deletePost(post.id);
-      } else {
+      if (hasErrors) {
         const errors = results.filter((r) => r.status === 'error').map((r) => r.error).join('; ');
-        console.log(`  ⚠️  Keeping post ${post.id} in DB for log review (some platforms failed)`);
+        console.log(`  ⚠️  Post ${post.id} published with errors: ${errors}`);
+      } else {
+        console.log(`  ✅ Post ${post.id} published to all platforms — kept in history`);
       }
     } else {
-      // Dry-run: log what would happen
-      const hasErrors = results.some((r) => r.status === 'error');
-      if (hasErrors) {
-        console.log(`  🔍 DRY RUN — would keep post ${post.id} (some failures)`);
-      } else {
-        console.log(`  🔍 DRY RUN — would delete post ${post.id}`);
-      }
+      console.log(`  🔍 DRY RUN — would publish post ${post.id} and keep in DB`);
     }
   }
 

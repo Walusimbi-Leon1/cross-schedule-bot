@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ── Design System ── */
-:root {
+/* ── Theme Variables ── */
+[data-theme="light"] {
   --bg: #f5f0e8;
   --surface: #ffffff;
   --surface-alt: #faf6ee;
+  --surface-hover: #f5f0e8;
   --border: #e2dac8;
   --border-light: #efe8d8;
   --text: #2c2416;
@@ -20,7 +21,7 @@
   --text-secondary: #6b5d4a;
   --text-muted: #9a8b78;
   --accent: #b8860b;
-  --accent-light: #d4a843;
+  --accent-hover: #a07000;
   --accent-dim: #a07000;
   --gold: #c9a84c;
   --gold-light: #f0deb0;
@@ -30,32 +31,63 @@
   --danger-light: #fdecea;
   --warn: #b8860b;
   --warn-light: #fff8e1;
-  --radius: 2px;
+  --info: #1565c0;
+  --info-light: #e3f2fd;
   --shadow: 0 1px 3px rgba(44, 36, 22, 0.06), 0 1px 2px rgba(44, 36, 22, 0.04);
   --shadow-up: 0 4px 12px rgba(44, 36, 22, 0.08);
-  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --header-bg: #ffffff;
+  --header-border: #e2dac8;
+  --toggle-bg: #e2dac8;
+  --toggle-active: #c9a84c;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+[data-theme="dark"] {
+  --bg: #0d0d17;
+  --surface: #16162a;
+  --surface-alt: #1e1e38;
+  --surface-hover: #24244a;
+  --border: #2a2a4a;
+  --border-light: #202040;
+  --text: #e0e0ec;
+  --text-primary: #f0f0fa;
+  --text-secondary: #9898b8;
+  --text-muted: #686888;
+  --accent: #c9a84c;
+  --accent-hover: #dbb95a;
+  --accent-dim: #8a7030;
+  --gold: #c9a84c;
+  --gold-light: #2a2430;
+  --success: #4caf50;
+  --success-light: #1a301c;
+  --danger: #e55545;
+  --danger-light: #301412;
+  --warn: #d4a843;
+  --warn-light: #2a2410;
+  --info: #5bb8f5;
+  --info-light: #0a1a2a;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-up: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --header-bg: #0d0d17;
+  --header-border: #2a2a4a;
+  --toggle-bg: #2a2a4a;
+  --toggle-active: #c9a84c;
+}
 
 /* ── Base ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  font-family: var(--font-body);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   padding: 40px 24px;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
 }
-h1, h2, h3, h4 { font-family: var(--font-display); color: var(--text-primary); }
+h1, h2, h3, h4 { font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif; color: var(--text-primary); }
 a { color: var(--accent); text-decoration: none; }
-a:hover { color: var(--accent-dim); }
-
-.container {
-  max-width: 840px;
-  margin: 0 auto;
-}
+a:hover { color: var(--accent-hover); }
+.container { max-width: 840px; margin: 0 auto; }
 
 /* ── Header ── */
 .page-header {
@@ -63,6 +95,7 @@ a:hover { color: var(--accent-dim); }
   margin-bottom: 48px;
   padding-bottom: 32px;
   border-bottom: 1px solid var(--border);
+  position: relative;
 }
 .page-header h1 {
   font-size: 2.6em;
@@ -71,11 +104,9 @@ a:hover { color: var(--accent-dim); }
   color: var(--text-primary);
   margin-bottom: 6px;
 }
-.page-header h1 .accent {
-  color: var(--accent);
-}
+.page-header h1 .accent { color: var(--accent); }
 .page-header .subtitle {
-  font-family: var(--font-display);
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.05em;
   font-style: italic;
   color: var(--text-secondary);
@@ -87,7 +118,8 @@ a:hover { color: var(--accent-dim); }
   color: var(--text-muted);
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 .page-header .status-line span {
   display: inline-flex;
@@ -95,14 +127,54 @@ a:hover { color: var(--accent-dim); }
   gap: 4px;
 }
 
+/* ── Theme Toggle ── */
+.theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78em;
+  color: var(--text-muted);
+}
+.toggle-track {
+  width: 44px;
+  height: 22px;
+  background: var(--toggle-bg);
+  border-radius: 11px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s;
+  border: none;
+  padding: 0;
+}
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--surface);
+  border-radius: 50%;
+  transition: transform 0.3s, background 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-track.active::after {
+  transform: translateX(22px);
+  background: var(--toggle-active);
+}
+
 /* ── Cards ── */
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 2px;
   padding: 32px;
   margin-bottom: 28px;
   box-shadow: var(--shadow);
+  transition: background 0.3s, border-color 0.3s;
 }
 .card h2 {
   font-size: 1.3em;
@@ -135,12 +207,12 @@ a:hover { color: var(--accent-dim); }
   padding: 10px 14px;
   background: var(--surface-alt);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 2px;
   color: var(--text);
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 0.92em;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 .form-group input:focus,
 .form-group textarea:focus {
@@ -150,6 +222,13 @@ a:hover { color: var(--accent-dim); }
 }
 .form-group textarea { min-height: 90px; resize: vertical; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.input-hint {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-style: italic;
+}
 
 /* ── Checkboxes ── */
 .checkbox-group {
@@ -166,64 +245,62 @@ a:hover { color: var(--accent-dim); }
   padding: 8px 16px;
   background: var(--surface-alt);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border-radius: 2px;
   text-transform: none;
   letter-spacing: normal;
   font-weight: 400;
   transition: all 0.2s;
 }
-.checkbox-group label:hover {
-  border-color: var(--gold);
-  background: var(--surface);
-}
-.checkbox-group input[type="checkbox"]:checked + span {
-  color: var(--accent);
-  font-weight: 500;
-}
-.checkbox-group input[type="checkbox"] {
-  accent-color: var(--accent);
-}
+.checkbox-group label:hover { border-color: var(--gold); background: var(--surface); }
+.checkbox-group input[type="checkbox"]:checked + span { color: var(--accent); font-weight: 500; }
+.checkbox-group input[type="checkbox"] { accent-color: var(--accent); }
 
 /* ── Buttons ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px 28px;
+  gap: 6px;
+  padding: 10px 24px;
   border: none;
-  border-radius: var(--radius);
+  border-radius: 2px;
   font-weight: 500;
-  font-size: 0.88em;
-  font-family: var(--font-body);
+  font-size: 0.85em;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: all 0.2s;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
 .btn-primary {
   background: var(--accent);
-  color: #fefefe;
+  color: #0d0d17;
   width: 100%;
 }
-.btn-primary:hover { background: var(--accent-dim); }
+.btn-primary:hover { background: var(--accent-hover); }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
 .btn-github {
   background: #1b1b1b;
   color: #f0f0f0;
 }
+[data-theme="dark"] .btn-github { background: #24244a; color: #e0e0ec; }
 .btn-github:hover { background: #333; }
 .btn-github:disabled { opacity: 0.4; cursor: not-allowed; }
-
 .btn-danger {
   background: transparent;
   color: var(--danger);
   border: 1px solid transparent;
   padding: 4px 12px;
-  font-size: 0.78em;
+  font-size: 0.76em;
 }
 .btn-danger:hover { border-color: var(--danger); }
-
+.btn-restore {
+  background: transparent;
+  color: var(--info);
+  border: 1px solid transparent;
+  padding: 4px 12px;
+  font-size: 0.76em;
+}
+.btn-restore:hover { border-color: var(--info); }
 .btn-outline {
   background: transparent;
   color: var(--text-secondary);
@@ -232,11 +309,7 @@ a:hover { color: var(--accent-dim); }
   font-size: 0.8em;
 }
 .btn-outline:hover { border-color: var(--gold); color: var(--accent); }
-
-.btn-sm {
-  padding: 8px 16px;
-  font-size: 0.82em;
-}
+.btn-sm { padding: 7px 14px; font-size: 0.8em; }
 
 /* ── Post list ── */
 .post-list { list-style: none; }
@@ -245,13 +318,13 @@ a:hover { color: var(--accent-dim); }
   background: var(--surface-alt);
   border-left: 3px solid var(--gold);
   margin-bottom: 10px;
-  border-radius: 0 var(--radius) var(--radius) 0;
-  transition: background 0.2s;
+  border-radius: 0 2px 2px 0;
+  transition: background 0.2s, border-color 0.2s;
 }
-.post-item:hover { background: var(--bg); }
+.post-item:hover { background: var(--surface-hover); }
 .post-item.post-failed { border-left-color: var(--danger); }
 .post-item.post-partial { border-left-color: var(--warn); }
-.post-item.post-done { border-left-color: var(--success); }
+.post-item.post-published { border-left-color: var(--success); }
 
 .post-header {
   display: flex;
@@ -261,7 +334,7 @@ a:hover { color: var(--accent-dim); }
 }
 .post-info { flex: 1; min-width: 0; }
 .post-text {
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   font-size: 0.9em;
   white-space: nowrap;
   overflow: hidden;
@@ -277,7 +350,11 @@ a:hover { color: var(--accent-dim); }
   flex-wrap: wrap;
   align-items: center;
 }
-
+.post-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
 .post-status {
   display: inline-block;
   padding: 2px 10px;
@@ -288,7 +365,7 @@ a:hover { color: var(--accent-dim); }
   letter-spacing: 0.5px;
 }
 .post-status.pending { background: var(--warn-light); color: var(--warn); }
-.post-status.publishing { background: #e3f2fd; color: #1565c0; }
+.post-status.publishing { background: var(--info-light); color: var(--info); }
 .post-status.published { background: var(--success-light); color: var(--success); }
 .post-status.partial { background: var(--warn-light); color: var(--warn); }
 .post-status.failed { background: var(--danger-light); color: var(--danger); }
@@ -313,21 +390,15 @@ a:hover { color: var(--accent-dim); }
 }
 .result-item.ok { background: var(--success-light); color: var(--success); }
 .result-item.error { background: var(--danger-light); color: var(--danger); }
-.result-item.skipped { background: #f0ede8; color: var(--text-muted); }
-
-.result-error-msg {
-  font-weight: 400;
-  font-size: 0.9em;
-  margin-left: 4px;
-  opacity: 0.8;
-}
+.result-item.skipped { background: var(--surface); color: var(--text-muted); border: 1px solid var(--border); }
+.result-error-msg { font-weight: 400; font-size: 0.9em; margin-left: 4px; opacity: 0.8; }
 
 /* ── Empty state ── */
 .empty-state {
   text-align: center;
   padding: 48px 20px;
   color: var(--text-muted);
-  font-family: var(--font-display);
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 1.1em;
 }
@@ -339,11 +410,11 @@ a:hover { color: var(--accent-dim); }
   bottom: 28px;
   right: 28px;
   padding: 14px 24px;
-  border-radius: var(--radius);
+  border-radius: 2px;
   color: white;
   font-weight: 500;
   font-size: 0.88em;
-  font-family: var(--font-body);
+  font-family: 'Inter', sans-serif;
   z-index: 999;
   transform: translateY(120px);
   opacity: 0;
@@ -354,7 +425,7 @@ a:hover { color: var(--accent-dim); }
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
-.toast.info { background: #1565c0; }
+.toast.info { background: var(--info); }
 
 /* ── Media URL entry ── */
 .media-entry {
@@ -366,66 +437,40 @@ a:hover { color: var(--accent-dim); }
 .media-entry input[type="text"] { flex: 2; }
 
 /* ── Token / Run section ── */
-.run-card-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.token-row {
-  display: flex;
-  gap: 8px;
-}
+.run-card-inner { display: flex; flex-direction: column; gap: 14px; }
+.token-row { display: flex; gap: 8px; }
 .token-row input { flex: 1; }
 .token-row .btn { width: auto; white-space: nowrap; }
-.run-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.run-status {
-  font-size: 0.84em;
-  color: var(--text-secondary);
-  font-style: italic;
-}
-.token-hint {
-  font-size: 0.78em;
-  color: var(--text-muted);
-  line-height: 1.5;
-}
+.run-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.run-status { font-size: 0.84em; color: var(--text-secondary); font-style: italic; }
+.token-hint { font-size: 0.78em; color: var(--text-muted); line-height: 1.5; }
 .token-hint a { color: var(--accent); }
-.token-hint code {
-  background: var(--surface-alt);
-  padding: 1px 6px;
-  border-radius: 2px;
-  font-size: 0.9em;
-  border: 1px solid var(--border-light);
-}
+.token-hint code { background: var(--surface-alt); padding: 1px 6px; border-radius: 2px; font-size: 0.9em; border: 1px solid var(--border-light); }
 
 /* ── Section divider ── */
 .section-divider {
-  font-family: var(--font-display);
-  font-size: 0.9em;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.95em;
   color: var(--text-muted);
   margin: 24px 0 14px;
   display: flex;
   align-items: center;
   gap: 12px;
 }
+.section-divider .count {
+  background: var(--surface-alt);
+  padding: 0 8px;
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78em;
+  font-style: normal;
+  color: var(--text-secondary);
+}
 .section-divider::after {
   content: '';
   flex: 1;
   height: 1px;
   background: var(--border-light);
-}
-
-/* ── Small print ── */
-.timezone-label {
-  font-family: var(--font-body);
-  font-size: 0.78em;
-  color: var(--text-muted);
-  margin-top: 4px;
-  font-style: italic;
 }
 
 /* ── Footer ── */
@@ -443,18 +488,49 @@ a:hover { color: var(--accent-dim); }
   background: var(--border);
   margin-bottom: 12px;
 }
+
+/* ── Restore modal ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 32px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: var(--shadow-up);
+}
+.modal h3 { font-size: 1.2em; margin-bottom: 16px; color: var(--text-primary); }
+.modal p { font-size: 0.88em; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
+.modal .checkbox-group { margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.modal-actions .btn { width: auto; }
 </style>
 </head>
 <body>
 <div class="container">
   <!-- Header -->
   <div class="page-header">
+    <div class="theme-toggle">
+      <span>☀️</span>
+      <button class="toggle-track" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme"></button>
+      <span>🌙</span>
+    </div>
     <h1>📡 Cross<span class="accent">Schedule</span></h1>
     <p class="subtitle">Schedule posts for Mastodon, Bluesky, and Telegram</p>
     <div class="status-line">
       <span>⏰ <span id="timezoneDisplay"></span></span>
-      <span>⚙️ Every 15 min via GitHub Actions</span>
-      <span>🗃️ Firebase Realtime Database</span>
+      <span>⚙️ GitHub Actions every 15 min</span>
+      <span>🗃️ Firebase RTDB</span>
     </div>
   </div>
 
@@ -466,18 +542,16 @@ a:hover { color: var(--accent-dim); }
         <label>Post Text</label>
         <textarea id="postText" placeholder="Write your post content…" rows="3"></textarea>
       </div>
-
       <div class="form-group">
         <label>Media URLs <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— optional</span></label>
         <div id="mediaContainer">
           <div class="media-entry">
-            <input type="text" class="media-url" placeholder="https://example.com/image.jpg">
+            <input type="text" class="media-url" placeholder="https://raw.githubusercontent.com/…/image.jpeg">
             <input type="text" class="media-alt" placeholder="Alt text for accessibility">
             <button type="button" class="btn btn-outline btn-sm" onclick="addMediaRow()">＋ Add</button>
           </div>
         </div>
       </div>
-
       <div class="form-group">
         <label>Platforms</label>
         <div class="checkbox-group">
@@ -486,7 +560,6 @@ a:hover { color: var(--accent-dim); }
           <label><input type="checkbox" value="telegram" checked> <span>✈️ Telegram</span></label>
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label>Date</label>
@@ -495,10 +568,9 @@ a:hover { color: var(--accent-dim); }
         <div class="form-group">
           <label>Time <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— 24h format</span></label>
           <input type="time" id="postTime" value="08:00">
-          <div class="timezone-label">Your timezone: <span id="timezoneDisplay2"></span></div>
+          <div class="input-hint">Your local time: <span id="timezoneDisplay2"></span></div>
         </div>
       </div>
-
       <button type="submit" class="btn btn-primary" id="scheduleBtn">📅 Schedule Post</button>
     </form>
   </div>
@@ -508,14 +580,13 @@ a:hover { color: var(--accent-dim); }
     <h2>▶️ Run Now</h2>
     <div class="run-card-inner">
       <div class="form-group" style="margin:0">
-        <label>GitHub Token <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— saved in browser, never shared</span></label>
+        <label>GitHub Token <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted)">— saved in browser</span></label>
         <div class="token-row">
-          <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <input type="password" id="githubToken" placeholder="ghp_xx…xxxx">
           <button class="btn btn-outline btn-sm" onclick="toggleToken()">👁️</button>
         </div>
         <div class="token-hint">
-          Requires <code>workflow</code> scope. 
-          <a href="https://github.com/settings/tokens/new?description=Cross-Schedule-Bot+Admin&scopes=workflow" target="_blank">Create one →</a>
+          Needs <code>workflow</code> scope. <a href="https://github.com/settings/tokens/new?description=Cross-Schedule-Bot+Admin&scopes=workflow" target="_blank">Create one →</a>
         </div>
       </div>
       <div class="run-actions">
@@ -525,20 +596,33 @@ a:hover { color: var(--accent-dim); }
     </div>
   </div>
 
-  <!-- Scheduled Posts -->
+  <!-- Posts & History -->
   <div class="card" style="padding-bottom:24px">
-    <h2>📋 Posts &amp; Logs</h2>
+    <h2>📋 Posts <span style="font-weight:400;font-size:0.75em;color:var(--text-muted)">— all posts, past &amp; future</span></h2>
     <div id="postListContainer">
       <div class="empty-state">
         <div class="icon">📭</div>
-        <p>No posts scheduled yet.<br>Use the form above to create one.</p>
+        <p>No posts yet.<br>Use the form above to schedule one.</p>
       </div>
     </div>
   </div>
 
   <div class="footer">
     <div class="divider"></div>
-    <p>Cross-Schedule Bot — built with Firebase, GitHub Actions, and a touch of gold.</p>
+    <p>Cross-Schedule Bot — Firebase + GitHub Actions</p>
+  </div>
+</div>
+
+<!-- Restore Modal -->
+<div class="modal-overlay" id="restoreModal">
+  <div class="modal">
+    <h3>🔄 Restore &amp; Republish</h3>
+    <p>This post was published to some platforms but failed on others. Select which platforms to retry:</p>
+    <div class="checkbox-group" id="restorePlatforms"></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeRestoreModal()">Cancel</button>
+      <button class="btn btn-primary" id="restoreConfirmBtn" onclick="confirmRestore()">🔄 Restore</button>
+    </div>
   </div>
 </div>
 
@@ -556,7 +640,7 @@ a:hover { color: var(--accent-dim); }
 </script>
 <script type="module">
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push, set, onValue, query, orderByChild, remove } from 'firebase/database';
+import { getDatabase, ref, push, set, onValue, query, orderByChild, remove, update } from 'firebase/database';
 
 // ── Firebase Config ──
 const firebaseConfig = {
@@ -579,6 +663,20 @@ const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 document.getElementById('timezoneDisplay').textContent = tz;
 document.getElementById('timezoneDisplay2').textContent = tz;
 
+// ── Theme ──
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+if (savedTheme === 'dark') document.getElementById('themeToggle').classList.add('active');
+
+window.toggleTheme = function() {
+  const el = document.getElementById('themeToggle');
+  const current = document.documentElement.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  el.classList.toggle('active');
+};
+
 // ── GitHub token from localStorage ──
 const savedToken = localStorage.getItem('github_token');
 if (savedToken) document.getElementById('githubToken').value = savedToken;
@@ -586,7 +684,7 @@ document.getElementById('githubToken').addEventListener('input', () => {
   localStorage.setItem('github_token', document.getElementById('githubToken').value.trim());
 });
 
-// ── Toast helper ──
+// ── Toast ──
 function showToast(message, type = 'success') {
   const toast = document.getElementById('toast');
   toast.textContent = message;
@@ -594,7 +692,7 @@ function showToast(message, type = 'success') {
   setTimeout(() => toast.classList.remove('show'), 4000);
 }
 
-// ── Toggle token visibility ──
+// ── Toggle token ──
 window.toggleToken = function() {
   const el = document.getElementById('githubToken');
   el.type = el.type === 'password' ? 'text' : 'password';
@@ -605,15 +703,9 @@ window.triggerWorkflow = async function() {
   const token = document.getElementById('githubToken').value.trim();
   const statusEl = document.getElementById('runStatus');
   const btn = document.getElementById('runNowBtn');
-
-  if (!token) {
-    showToast('Please enter a GitHub token first.', 'error');
-    return;
-  }
-
+  if (!token) { showToast('Please enter a GitHub token first.', 'error'); return; }
   btn.disabled = true;
   statusEl.textContent = '⏳ Triggering workflow…';
-
   try {
     const res = await fetch(
       'https://api.github.com/repos/Walusimbi-Leon1/cross-schedule-bot/actions/workflows/scheduler.yml/dispatches',
@@ -627,7 +719,6 @@ window.triggerWorkflow = async function() {
         body: JSON.stringify({ ref: 'main' }),
       }
     );
-
     if (res.status === 204) {
       statusEl.textContent = '✅ Workflow triggered! Check the Actions tab.';
       showToast('🚀 Workflow triggered!');
@@ -640,7 +731,6 @@ window.triggerWorkflow = async function() {
     statusEl.textContent = `❌ ${e.message}`;
     showToast(`❌ Failed: ${e.message}`, 'error');
   }
-
   btn.disabled = false;
 };
 
@@ -661,35 +751,25 @@ window.addMediaRow = addMediaRow;
 // ── Schedule a post ──
 document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-
   const text = document.getElementById('postText').value.trim();
   const date = document.getElementById('postDate').value;
   const time = document.getElementById('postTime').value || '08:00';
-
   const mediaUrlInputs = document.querySelectorAll('.media-url');
   const mediaAltInputs = document.querySelectorAll('.media-alt');
   const media = [];
   mediaUrlInputs.forEach((input, i) => {
     const url = input.value.trim();
-    if (url) {
-      media.push({ url, alt: mediaAltInputs[i]?.value?.trim() || '', type: guessMediaType(url) });
-    }
+    if (url) media.push({ url, alt: mediaAltInputs[i]?.value?.trim() || '', type: guessMediaType(url) });
   });
-
   const platformCbs = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
   const platforms = Array.from(platformCbs).map(cb => cb.value);
-
   if (!text && media.length === 0) { showToast('Please enter text or add media.', 'error'); return; }
   if (platforms.length === 0) { showToast('Select at least one platform.', 'error'); return; }
-
-  // Build timestamp from local time (browser converts to UTC epoch)
   const scheduledAt = new Date(`${date}T${time}:00`).getTime();
   if (scheduledAt < Date.now()) { showToast('Scheduled time must be in the future.', 'error'); return; }
-
   const btn = document.getElementById('scheduleBtn');
   btn.disabled = true;
   btn.textContent = '⏳ Scheduling…';
-
   try {
     const newPostRef = push(postsRef);
     await set(newPostRef, {
@@ -706,7 +786,6 @@ document.getElementById('scheduleForm').addEventListener('submit', async (e) => 
         <button type="button" class="btn btn-outline btn-sm" onclick="addMediaRow()">＋ Add</button>
       </div>`;
   } catch (err) { showToast(`❌ Could not schedule: ${err.message}`, 'error'); }
-
   btn.disabled = false;
   btn.textContent = '📅 Schedule Post';
 });
@@ -718,47 +797,81 @@ function guessMediaType(url) {
   return 'unknown';
 }
 
-// ── Listen for scheduled posts ──
-const postsQuery = query(postsRef, orderByChild('scheduledAt'));
+// ── Restore modal state ──
+let restorePostId = null;
+let restoreAllPlatforms = [];
+
+window.openRestoreModal = function(postId, missedPlatforms, allPlatforms) {
+  restorePostId = postId;
+  restoreAllPlatforms = allPlatforms;
+  const container = document.getElementById('restorePlatforms');
+  container.innerHTML = '';
+  const icons = { mastodon: '🐘', bluesky: '🦋', telegram: '✈️' };
+  const allP = allPlatforms || ['mastodon', 'bluesky', 'telegram'];
+  for (const p of allP) {
+    const isMissed = missedPlatforms.includes(p);
+    const chk = document.createElement('label');
+    chk.innerHTML = `<input type="checkbox" value="${p}" ${isMissed ? 'checked' : ''}> <span>${icons[p] || '📡'} ${p.charAt(0).toUpperCase() + p.slice(1)}${isMissed ? ' (missed)' : ''}</span>`;
+    container.appendChild(chk);
+  }
+  document.getElementById('restoreModal').classList.add('show');
+};
+
+window.closeRestoreModal = function() {
+  document.getElementById('restoreModal').classList.remove('show');
+  restorePostId = null;
+};
+
+window.confirmRestore = async function() {
+  if (!restorePostId) return;
+  const checked = document.querySelectorAll('#restorePlatforms input[type="checkbox"]:checked');
+  const platforms = Array.from(checked).map(cb => cb.value);
+  if (platforms.length === 0) { showToast('Select at least one platform.', 'error'); return; }
+  try {
+    await update(ref(database, `scheduled-posts/${restorePostId}`), {
+      status: 'pending',
+      platforms,
+      results: null,
+      error: null,
+      text: document.querySelector(`#post-${restorePostId} .post-text`)?.textContent || '(restored)',
+      restoredAt: Date.now(),
+      scheduledAt: Date.now(), // due immediately
+    });
+    showToast('🔄 Post restored! Trigger the workflow to republish.');
+    closeRestoreModal();
+  } catch (err) { showToast(`❌ Restore failed: ${err.message}`, 'error'); }
+};
+
+// ── Listen for posts ──
+const postsQuery = query(postsRef, orderByChild('createdAt'));
 onValue(postsQuery, (snapshot) => {
   const container = document.getElementById('postListContainer');
   const posts = [];
-
   snapshot.forEach((child) => {
     posts.push({ id: child.key, ...child.val() });
   });
-
   if (posts.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="icon">📭</div>
-        <p>No posts yet.<br>Use the form above to create one.</p>
-      </div>`;
+    container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>No posts yet.<br>Use the form above to create one.</p></div>`;
     return;
   }
 
+  // Sort: active first (by scheduledAt), then history (by publishedAt desc)
   const active = posts.filter(p => p.status === 'pending' || p.status === 'publishing');
   const done = posts.filter(p => ['published','partial','failed'].includes(p.status));
-
   active.sort((a, b) => a.scheduledAt - b.scheduledAt);
   done.sort((a, b) => (b.publishedAt || b.scheduledAt) - (a.publishedAt || a.scheduledAt));
 
   let html = '';
-
   if (active.length > 0) {
-    html += '<div class="section-divider">⏳ Upcoming &middot; In Progress</div>';
-    html += '<ul class="post-list">';
+    html += `<div class="section-divider">⏳ Upcoming &amp; In Progress <span class="count">${active.length}</span></div><ul class="post-list">`;
     for (const post of active) html += renderPost(post);
     html += '</ul>';
   }
-
   if (done.length > 0) {
-    html += '<div class="section-divider">📜 History</div>';
-    html += '<ul class="post-list">';
+    html += `<div class="section-divider">📜 History <span class="count">${done.length}</span></div><ul class="post-list">`;
     for (const post of done) html += renderPost(post);
     html += '</ul>';
   }
-
   container.innerHTML = html;
 });
 
@@ -770,10 +883,12 @@ function renderPost(post) {
   }) + ` ${tz}`;
   const statusClass = post.status || 'pending';
   const platformsStr = (post.platforms || []).join(', ');
-  const showDelete = post.status === 'pending' || post.status === 'publishing';
+  const showRestore = post.status === 'partial' || post.status === 'failed';
+  const showDelete = true; // delete on all posts
 
-  // Per-platform result badges
+  // Per-platform badges
   let resultsHtml = '';
+  let missedPlatforms = [];
   if (post.results && Array.isArray(post.results)) {
     resultsHtml = '<div class="results-log">';
     const icons = { mastodon: '🐘', bluesky: '🦋', telegram: '✈️' };
@@ -783,18 +898,26 @@ function renderPost(post) {
       resultsHtml += `<span class="result-item ${r.status}">${icon} ${statusIcon} ${r.platform}`;
       if (r.error) resultsHtml += `<span class="result-error-msg">${escapeHtml(r.error.slice(0, 100))}</span>`;
       resultsHtml += '</span>';
+      if (r.status === 'error') missedPlatforms.push(r.platform);
     }
     resultsHtml += '</div>';
   }
 
-  // Border accent color based on status
+  // All platforms for restore
+  const allPlatforms = post.platforms || ['mastodon', 'bluesky', 'telegram'];
+  if (missedPlatforms.length === 0 && post.status === 'failed') {
+    missedPlatforms = allPlatforms;
+  }
+
   let extraClass = '';
   if (post.status === 'failed') extraClass = ' post-failed';
   else if (post.status === 'partial') extraClass = ' post-partial';
-  else if (post.status === 'published') extraClass = ' post-done';
+  else if (post.status === 'published') extraClass = ' post-published';
+
+  const postId = post.id;
 
   return `
-    <li class="post-item${extraClass}">
+    <li class="post-item${extraClass}" id="post-${postId}">
       <div class="post-header">
         <div class="post-info">
           <div class="post-text">${escapeHtml((post.text || '(media only)').slice(0, 160))}</div>
@@ -803,20 +926,25 @@ function renderPost(post) {
             ${platformsStr ? `<span>🎯 ${platformsStr}</span>` : ''}
             ${post.media?.length ? `<span>📎 ${post.media.length} ${post.media.length === 1 ? 'file' : 'files'}</span>` : ''}
             <span class="post-status ${statusClass}">${statusClass}</span>
-            ${post.error ? `<span style="color:var(--danger)">${escapeHtml(post.error.slice(0, 80))}</span>` : ''}
+            ${post.error ? `<span style="color:var(--danger)" title="${escapeHtml(post.error)}">⚠️ err</span>` : ''}
           </div>
         </div>
-        ${showDelete ? `<button class="btn btn-danger" onclick="deletePost('${post.id}')">Delete</button>` : ''}
+        <div class="post-actions">
+          ${showRestore ? `<button class="btn btn-restore" onclick="window.openRestoreModal('${postId}', ${JSON.stringify(missedPlatforms)}, ${JSON.stringify(allPlatforms)})">🔄 Restore</button>` : ''}
+          <button class="btn btn-danger" onclick="window.deletePost('${postId}')">Delete</button>
+        </div>
       </div>
       ${resultsHtml}
     </li>`;
 }
 
-// ── Delete a post ──
+// ── Delete post ──
 window.deletePost = async function(postId) {
-  if (!confirm('Delete this scheduled post?')) return;
-  try { await remove(ref(database, `scheduled-posts/${postId}`)); showToast('🗑️ Post deleted'); }
-  catch (err) { showToast(`❌ Delete failed: ${err.message}`, 'error'); }
+  if (!confirm('Delete this post permanently?')) return;
+  try {
+    await remove(ref(database, `scheduled-posts/${postId}`));
+    showToast('🗑️ Post deleted');
+  } catch (err) { showToast(`❌ Delete failed: ${err.message}`, 'error'); }
 };
 
 // ── Escape HTML ──
