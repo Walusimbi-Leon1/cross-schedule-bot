@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "scheduled-posts": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["scheduledAt", "status"]
+    }
+  }
+}

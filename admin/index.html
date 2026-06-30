@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cross-Schedule Bot — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e0e1a;
+  --card: #16162a;
+  --card-hover: #1c1c38;
+  --border: #2a2a48;
+  --text: #e8e8f0;
+  --text-dim: #8888aa;
+  --text-muted: #666688;
+  --accent: #c4a04a;
+  --accent-dim: #8a7030;
+  --danger: #e74c3c;
+  --success: #2ecc71;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+h1 {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+h1 small {
+  font-size: 0.55em;
+  font-weight: 400;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-left: 12px;
+}
+.subtitle { color: var(--text-dim); margin-bottom: 40px; font-size: 0.9em; }
+.container { max-width: 800px; margin: 0 auto; }
+
+/* ── Cards ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.card h2 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+/* ── Form ── */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 0.85em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95em;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+}
+.form-group textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── Checkboxes ── */
+.checkbox-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9em;
+  cursor: pointer;
+  padding: 8px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+.checkbox-group label:hover {
+  border-color: var(--accent-dim);
+}
+.checkbox-group input:checked + span {
+  color: var(--accent);
+}
+.checkbox-group input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+
+/* ── Buttons ── */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  width: 100%;
+}
+.btn-primary:hover { background: #dbb95a; }
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 6px 14px;
+  font-size: 0.8em;
+}
+.btn-danger:hover { background: rgba(231, 76, 60, 0.1); }
+
+/* ── Post list ── */
+.post-list { list-style: none; }
+.post-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: var(--bg);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+.post-item:hover { border-color: var(--accent-dim); }
+.post-info { flex: 1; min-width: 0; }
+.post-text {
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+.post-meta {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.post-status {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75em;
+  font-weight: 500;
+}
+.post-status.pending { background: rgba(196, 160, 74, 0.15); color: var(--accent); }
+.post-status.publishing { background: rgba(52, 152, 219, 0.15); color: #3498db; }
+.post-status.published { background: rgba(46, 204, 113, 0.15); color: var(--success); }
+.post-status.failed { background: rgba(231, 76, 60, 0.15); color: var(--danger); }
+
+/* ── Empty state ── */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 2em; margin-bottom: 8px; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  font-size: 0.9em;
+  z-index: 999;
+  transform: translateY(120px);
+  opacity: 0;
+  transition: all 0.4s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* ── Media URL entry ── */
+.media-entry {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.media-entry input { flex: 1; }
+.media-entry input[type="text"] { flex: 2; }
+.btn-add-media {
+  background: var(--accent-dim);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+.btn-add-media:hover { background: var(--accent); }
+.media-list { margin-top: 8px; }
+.media-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  margin-bottom: 4px;
+  font-size: 0.85em;
+  color: var(--text-dim);
+}
+.media-item .remove {
+  color: var(--danger);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.media-item .remove:hover { opacity: 0.7; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📡 Cross-Schedule Bot <small>Admin Dashboard</small></h1>
+  <p class="subtitle">Schedule posts for Mastodon, Bluesky, and Telegram</p>
+
+  <!-- Schedule Post -->
+  <div class="card">
+    <h2>📅 Schedule a Post</h2>
+    <form id="scheduleForm">
+      <div class="form-group">
+        <label>Post Text</label>
+        <textarea id="postText" placeholder="Write your post content..." rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Media URLs (optional)</label>
+        <div id="mediaContainer">
+          <div class="media-entry">
+            <input type="text" class="media-url" placeholder="https://example.com/image.jpg">
+            <input type="text" class="media-alt" placeholder="Alt text for accessibility">
+            <button type="button" class="btn-add-media" onclick="addMediaRow()">+ Add</button>
+          </div>
+        </div>
+        <div id="mediaList" class="media-list"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Platforms</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" value="mastodon" checked> <span>🐘 Mastodon</span></label>
+          <label><input type="checkbox" value="bluesky" checked> <span>🦋 Bluesky</span></label>
+          <label><input type="checkbox" value="telegram" checked> <span>✈️ Telegram</span></label>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="postDate">
+        </div>
+        <div class="form-group">
+          <label>Time (UTC)</label>
+          <input type="time" id="postTime" value="08:00">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="scheduleBtn">📅 Schedule Post</button>
+    </form>
+  </div>
+
+  <!-- Scheduled Posts -->
+  <div class="card">
+    <h2>📋 Scheduled Posts</h2>
+    <div id="postListContainer">
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <p>No scheduled posts yet</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Firebase Web SDK -->
+<script type="importmap">
+{
+  "imports": {
+    "firebase/app": "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js",
+    "firebase/database": "https://www.gstatic.com/firebasejs/12.15.0/firebase-database.js"
+  }
+}
+</script>
+<script type="module">
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, push, set, onValue, query, orderByChild, remove, update } from 'firebase/database';
+
+// ── Firebase Config ──
+const firebaseConfig = {
+  apiKey: "AIzaSyCK37q3HVbAQZgwUUqUI8rGyTprNA30rBE",
+  authDomain: "oddsalley-31ydy.firebaseapp.com",
+  databaseURL: "https://oddsalley-31ydy-default-rtdb.firebaseio.com",
+  projectId: "oddsalley-31ydy",
+  storageBucket: "oddsalley-31ydy.firebasestorage.app",
+  messagingSenderId: "628884218321",
+  appId: "1:628884218321:web:bde5da901da5e17aa8c0f0",
+  measurementId: "G-RBC117Q15C"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const postsRef = ref(database, 'scheduled-posts');
+
+// ── Set min date to today ──
+document.getElementById('postDate').min = new Date().toISOString().split('T')[0];
+document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+
+// ── Toast helper ──
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = `toast ${type} show`;
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ── Media rows ──
+function addMediaRow(url = '', alt = '') {
+  const container = document.getElementById('mediaContainer');
+  const entry = document.createElement('div');
+  entry.className = 'media-entry';
+  entry.innerHTML = `
+    <input type="text" class="media-url" placeholder="https://example.com/image.jpg" value="${url}">
+    <input type="text" class="media-alt" placeholder="Alt text" value="${alt}">
+    <button type="button" class="btn-add-media" onclick="this.parentElement.remove()">✕</button>
+  `;
+  container.appendChild(entry);
+}
+window.addMediaRow = addMediaRow;
+
+// ── Schedule a post ──
+document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const text = document.getElementById('postText').value.trim();
+  const date = document.getElementById('postDate').value;
+  const time = document.getElementById('postTime').value || '08:00';
+
+  // Media URLs
+  const mediaUrlInputs = document.querySelectorAll('.media-url');
+  const mediaAltInputs = document.querySelectorAll('.media-alt');
+  const media = [];
+  mediaUrlInputs.forEach((input, i) => {
+    const url = input.value.trim();
+    if (url) {
+      media.push({
+        url,
+        alt: mediaAltInputs[i]?.value?.trim() || '',
+        type: guessMediaType(url),
+      });
+    }
+  });
+
+  // Platforms
+  const platformCbs = document.querySelectorAll('.checkbox-group input[type="checkbox"]:checked');
+  const platforms = Array.from(platformCbs).map(cb => cb.value);
+
+  if (!text && media.length === 0) {
+    showToast('Please enter text or add media.', 'error');
+    return;
+  }
+  if (platforms.length === 0) {
+    showToast('Select at least one platform.', 'error');
+    return;
+  }
+
+  // Build scheduledAt timestamp (UTC)
+  const scheduledAt = new Date(`${date}T${time}:00Z`).getTime();
+  if (scheduledAt < Date.now()) {
+    showToast('Scheduled time must be in the future.', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('scheduleBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Scheduling...';
+
+  try {
+    const newPostRef = push(postsRef);
+    await set(newPostRef, {
+      text,
+      media,
+      platforms,
+      scheduledAt,
+      status: 'pending',
+      createdAt: Date.now(),
+      publishedAt: null,
+      error: null,
+    });
+
+    showToast(`✅ Post scheduled for ${date} ${time} UTC`);
+    document.getElementById('postText').value = '';
+    // Clear media rows except first empty one
+    const container = document.getElementById('mediaContainer');
+    container.innerHTML = `
+      <div class="media-entry">
+        <input type="text" class="media-url" placeholder="https://example.com/image.jpg">
+        <input type="text" class="media-alt" placeholder="Alt text for accessibility">
+        <button type="button" class="btn-add-media" onclick="addMediaRow()">+ Add</button>
+      </div>`;
+  } catch (err) {
+    showToast(`❌ Failed: ${err.message}`, 'error');
+  }
+
+  btn.disabled = false;
+  btn.textContent = '📅 Schedule Post';
+});
+
+function guessMediaType(url) {
+  const ext = url.split('.').pop().toLowerCase().split('?')[0];
+  if (['jpg','jpeg','png','gif','webp','svg'].includes(ext)) return 'image';
+  if (['mp4','webm','mov','avi','mkv'].includes(ext)) return 'video';
+  return 'unknown';
+}
+
+// ── Listen for scheduled posts ──
+const postsQuery = query(postsRef, orderByChild('scheduledAt'));
+onValue(postsQuery, (snapshot) => {
+  const container = document.getElementById('postListContainer');
+  const posts = [];
+
+  snapshot.forEach((child) => {
+    const val = child.val();
+    if (val.status !== 'published') {
+      posts.push({ id: child.key, ...val });
+    }
+  });
+
+  if (posts.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">📭</div>
+        <p>No upcoming scheduled posts</p>
+      </div>`;
+    return;
+  }
+
+  // Sort by scheduledAt ascending
+  posts.sort((a, b) => a.scheduledAt - b.scheduledAt);
+
+  let html = '<ul class="post-list">';
+  for (const post of posts) {
+    const dt = new Date(post.scheduledAt);
+    const dateStr = dt.toLocaleString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', timeZone: 'UTC',
+    });
+    const statusClass = post.status || 'pending';
+    const platformsStr = (post.platforms || Object.keys({mastodon:1,bluesky:1,telegram:1})).join(', ');
+
+    html += `
+      <li class="post-item">
+        <div class="post-info">
+          <div class="post-text">${escapeHtml((post.text || '(media only)').slice(0, 120))}</div>
+          <div class="post-meta">
+            <span>📅 ${dateStr} UTC</span>
+            <span>🎯 ${platformsStr}</span>
+            ${post.media?.length ? `<span>📎 ${post.media.length} media</span>` : ''}
+            <span class="post-status ${statusClass}">${statusClass}</span>
+            ${post.error ? `<span style="color:var(--danger)">⚠️ ${escapeHtml(post.error.slice(0, 60))}</span>` : ''}
+          </div>
+        </div>
+        <button class="btn btn-danger" onclick="deletePost('${post.id}')">Delete</button>
+      </li>`;
+  }
+  html += '</ul>';
+  container.innerHTML = html;
+});
+
+// ── Delete a post ──
+window.deletePost = async function(postId) {
+  if (!confirm('Delete this scheduled post?')) return;
+  try {
+    await remove(ref(database, `scheduled-posts/${postId}`));
+    showToast('🗑️ Post deleted');
+  } catch (err) {
+    showToast(`❌ Delete failed: ${err.message}`, 'error');
+  }
+};
+
+// ── Escape HTML ──
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

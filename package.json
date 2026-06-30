@@ -1,0 +1,20 @@
+{
+  "name": "cross-schedule-bot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Schedule and auto-post to Mastodon, Bluesky, and Telegram via Firebase",
+  "scripts": {
+    "start": "node src/index.js",
+    "dry": "DRY_RUN=true node src/index.js",
+    "dashboard": "node admin/server.js"
+  },
+  "dependencies": {
+    "@atproto/api": "^0.13.35",
+    "firebase-admin": "^13.1.0"
+  },
+  "devDependencies": {
+    "express": "^4.21.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}
