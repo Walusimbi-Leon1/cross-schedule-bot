@@ -303,7 +303,7 @@ h1 small {
           <input type="date" id="postDate">
         </div>
         <div class="form-group">
-          <label>Time (UTC)</label>
+          <label>Time (UTC — 24h format)</label>
           <input type="time" id="postTime" value="08:00">
         </div>
       </div>
@@ -495,9 +495,9 @@ onValue(postsQuery, (snapshot) => {
   let html = '<ul class="post-list">';
   for (const post of posts) {
     const dt = new Date(post.scheduledAt);
-    const dateStr = dt.toLocaleString('en-US', {
+    const dateStr = dt.toLocaleString('en-GB', {
       month: 'short', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', timeZone: 'UTC',
+      hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC',
     });
     const statusClass = post.status || 'pending';
     const platformsStr = (post.platforms || Object.keys({mastodon:1,bluesky:1,telegram:1})).join(', ');
